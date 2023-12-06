@@ -1,9 +1,12 @@
 #!/usr/bin/python3
 """
-Lockboses
+Lockboxes
 """
 
-def canUnlockAll(boxes):
+from typing import List
+
+
+def canUnlockAll(boxes: List[List[int]]) -> bool:
     """
     Determine if all the boxes can be opened.
 
@@ -49,3 +52,9 @@ def canUnlockAll(boxes):
                 stack.append(key)
 
     return all(visited)
+
+
+if __name__ == "__main__":
+    # Example test case
+    test_boxes = [[1, 2], [3], [0], []]
+    print(canUnlockAll(test_boxes))
