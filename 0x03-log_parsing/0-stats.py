@@ -1,10 +1,11 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
-A script: Reads standard input line by line and computes metrics
+Log parsing interview challenge.
 """
 
+import sys
 
-def parseLogs():
+def parse_logs():
     """
     Reads logs from standard input and generates reports
     Reports:
@@ -12,32 +13,32 @@ def parseLogs():
     Raises:
         KeyboardInterrupt (Exception): handles this exception and raises it
     """
-    stdin = __import__('sys').stdin
     lineNumber = 0
     fileSize = 0
     statusCodes = {}
     codes = ('200', '301', '400', '401', '403', '404', '405', '500')
+    
     try:
-        for line in stdin:
+        for line in sys.stdin:
             lineNumber += 1
-            line = line.split()
+            parts = line.split()
+
             try:
-                fileSize += int(line[-1])
-                if line[-2] in codes:
-                    try:
-                        statusCodes[line[-2]] += 1
-                    except KeyError:
-                        statusCodes[line[-2]] = 1
+                fileSize += int(parts[-1])
+                if parts[-2] in codes:
+                    statusCodes[parts[-2]] = statusCodes.get(parts[-2], 0) + 1
             except (IndexError, ValueError):
                 pass
+            
             if lineNumber == 10:
                 report(fileSize, statusCodes)
                 lineNumber = 0
+
         report(fileSize, statusCodes)
-    except KeyboardInterrupt as e:
+        
+    except KeyboardInterrupt:
         report(fileSize, statusCodes)
         raise
-
 
 def report(fileSize, statusCodes):
     """
@@ -46,10 +47,9 @@ def report(fileSize, statusCodes):
         fileSize (int): total log size after every 10 successfully read line
         statusCodes (dict): dictionary of status codes and counts
     """
-    print("File size: {}".format(fileSize))
+    print(f"File size: {fileSize}")
     for key, value in sorted(statusCodes.items()):
-        print("{}: {}".format(key, value))
-
+        print(f"{key}: {value}")
 
 if __name__ == '__main__':
-    parseLogs()
+    parse_logs()
