@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Log parsing interview challenge.
+Log parsing interview challenge
 """
 
 import sys
@@ -44,12 +44,12 @@ def report(fileSize, statusCodes):
     """
     Prints generated report to standard output
     Args:
-        fileSize (int): total log size after every 10 successfully read line
+        fileSize (int): total log size after every 10 successfully read lines
         statusCodes (dict): dictionary of status codes and counts
     """
-    print(f"File size: {fileSize}")
+    print("File size: {}".format(fileSize))
     for key, value in sorted(statusCodes.items()):
-        print(f"{key}: {value}")
+        print("{}: {}".format(key, value))
 
 if __name__ == '__main__':
     parse_logs()
