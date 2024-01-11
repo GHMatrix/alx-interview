@@ -79,7 +79,7 @@ def recursively_solve(chess_board, row, queens, solutions):
             tmp_board[row][col] = "Q"
             mark_out(tmp_board, row, col)
             solutions = recursively_solve(tmp_board, row + 1,
-                                           queens + 1, solutions)
+                                          queens + 1, solutions)
 
     return solutions
 
