@@ -4,85 +4,84 @@
 import sys
 
 
-def init_board(n):
-    """Initialize an sized chessboard with 0's."""
-    board = []
-    [board.append([]) for i in range(n)]
-    [row.append(' ') for i in range(n) for row in board]
-    return (board)
+def initialize_board(size):
+    """Initialize a sized chessboard with 0's."""
+    chess_board = []
+    [chess_board.append([]) for i in range(size)]
+    [row.append(' ') for i in range(size) for row in chess_board]
+    return chess_board
 
 
-def board_deepcopy(board):
+def copy_board(original_board):
     """Return a deepcopy of a chessboard."""
-    if isinstance(board, list):
-        return list(map(board_deepcopy, board))
-    return (board)
+    if isinstance(original_board, list):
+        return list(map(copy_board, original_board))
+    return original_board
 
 
-def get_solution(board):
+def get_solution(chess_board):
     """Return the list of lists representation of a solved chessboard."""
     solution = []
-    for r in range(len(board)):
-        for c in range(len(board)):
-            if board[r][c] == "Q":
+    for r in range(len(chess_board)):
+        for c in range(len(chess_board)):
+            if chess_board[r][c] == "Q":
                 solution.append([r, c])
                 break
-    return (solution)
+    return solution
 
 
-def xout(board, row, col):
-    """X spots on a chessboard.
-    """
-    for c in range(col + 1, len(board)):
-        board[row][c] = "x"
+def mark_out(chess_board, row, col):
+    """Mark out spots on a chessboard."""
+    for c in range(col + 1, len(chess_board)):
+        chess_board[row][c] = "x"
     for c in range(col - 1, -1, -1):
-        board[row][c] = "x"
-    for r in range(row + 1, len(board)):
-        board[r][col] = "x"
+        chess_board[row][c] = "x"
+    for r in range(row + 1, len(chess_board)):
+        chess_board[r][col] = "x"
     for r in range(row - 1, -1, -1):
-        board[r][col] = "x"
+        chess_board[r][col] = "x"
     c = col + 1
-    for r in range(row + 1, len(board)):
-        if c >= len(board):
+    for r in range(row + 1, len(chess_board)):
+        if c >= len(chess_board):
             break
-        board[r][c] = "x"
+        chess_board[r][c] = "x"
         c += 1
     c = col - 1
     for r in range(row - 1, -1, -1):
         if c < 0:
             break
-        board[r][c]
+        chess_board[r][c]
         c -= 1
     c = col + 1
     for r in range(row - 1, -1, -1):
-        if c >= len(board):
+        if c >= len(chess_board):
             break
-        board[r][c] = "x"
+        chess_board[r][c] = "x"
         c += 1
     c = col - 1
-    for r in range(row + 1, len(board)):
+    for r in range(row + 1, len(chess_board)):
         if c < 0:
             break
-        board[r][c] = "x"
+        chess_board[r][c] = "x"
         c -= 1
 
 
-def recursive_solve(board, row, queens, solutions):
+def recursively_solve(chess_board, row, queens, solutions):
     """Recursively solve an N-queens puzzle.
     """
-    if queens == len(board):
-        solutions.append(get_solution(board))
-        return (solutions)
+    if queens == len(chess_board):
+        solutions.append(get_solution(chess_board))
+        return solutions
 
-    for c in range(len(board)):
-        if board[row][c] == " ":
-            tmp_board = board_deepcopy(board)
-            tmp_board[row][c] = "Q"
-            xout(tmp_board, row, c)
-            solutions = recursive_solve(tmp_board, row + 1,
-                                        queens + 1, solutions)
+    for col in range(len(chess_board)):
+        if chess_board[row][col] == " ":
+            tmp_board = copy_board(chess_board)
+            tmp_board[row][col] = "Q"
+            mark_out(tmp_board, row, col)
+            solutions = recursively_solve(tmp_board, row + 1,
+                                           queens + 1, solutions)
 
-    return (solutions)
+    return solutions
 
 
 if __name__ == "__main__":
@@ -96,7 +95,7 @@ if __name__ == "__main__":
         print("N must be at least 4")
         sys.exit(1)
 
-    board = init_board(int(sys.argv[1]))
-    solutions = recursive_solve(board, 0, 0, [])
+    chess_board = initialize_board(int(sys.argv[1]))
+    solutions = recursively_solve(chess_board, 0, 0, [])
     for sol in solutions:
         print(sol)
