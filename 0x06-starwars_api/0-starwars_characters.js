@@ -27,8 +27,8 @@ request(apiUrl, function (error, response, body) {
     process.exit(1);
   }
 
-  // Fetch each character's information
-  movie.characters.forEach(characterUrl => {
+  // Function to fetch character's name and print
+  function fetchCharacterName (characterUrl) {
     request(characterUrl, function (error, response, characterBody) {
       if (error) {
         console.error('Error:', error);
@@ -43,5 +43,15 @@ request(apiUrl, function (error, response, body) {
       const character = JSON.parse(characterBody);
       console.log(character.name);
     });
-  });
+  }
+
+  // Fetch and print each character's name
+  (async function () {
+    for (const characterUrl of movie.characters) {
+      await new Promise(resolve => {
+        fetchCharacterName(characterUrl);
+        setTimeout(resolve, 500); // Add a small delay to prevent rate limiting
+      });
+    }
+  })();
 });
