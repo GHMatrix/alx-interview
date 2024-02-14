@@ -2,43 +2,41 @@
 """Prime Game Module"""
 
 
-def is_prime(num):
-    """Check if a number is prime"""
-    if num < 2:
-        return False
-    for i in range(2, int(num**0.5) + 1):
-        if num % i == 0:
-            return False
-    return True
+def primeNumbers(n):
+    """Return list of prime numbers between 1 and n inclusive
+       Args:
+        n (int): upper boundary of range. lower boundary is always 1
+    """
+    primeNos = []
+    filtered = [True] * (n + 1)
+    for prime in range(2, n + 1):
+        if (filtered[prime]):
+            primeNos.append(prime)
+            for i in range(prime, n + 1, prime):
+                filtered[i] = False
+    return primeNos
 
 
 def isWinner(x, nums):
-    """Determine the winner of each round"""
-    wins = {"Maria": 0, "Ben": 0}
-
-    for n in nums:
-        primes = [i for i in range(1, n + 1) if is_prime(i)]
-
-        # Maria always starts first
-        maria_turn = True
-        while primes:
-            max_prime = max(primes)
-            primes = [p for p in primes if p % max_prime != 0]
-
-            if maria_turn:
-                wins["Maria"] += 1
-            else:
-                wins["Ben"] += 1
-
-            maria_turn = not maria_turn
-
-    if wins["Maria"] > wins["Ben"]:
-        return "Maria"
-    elif wins["Maria"] < wins["Ben"]:
-        return "Ben"
-    else:
+    """
+    Determines winner of Prime Game
+    Args:
+        x (int): no. of rounds of game
+        nums (int): upper limit of range for each round
+    Return:
+        Name of winner (Maria or Ben) or None if winner cannot be found
+    """
+    if x is None or nums is None or x == 0 or nums == []:
         return None
-
-
-if __name__ == "__main__":
-    print("Winner: {}".format(isWinner(5, [2, 5, 1, 4, 3])))
+    Maria = Ben = 0
+    for i in range(x):
+        primeNos = primeNumbers(nums[i])
+        if len(primeNos) % 2 == 0:
+            Ben += 1
+        else:
+            Maria += 1
+    if Maria > Ben:
+        return 'Maria'
+    elif Ben > Maria:
+        return 'Ben'
+    return None
